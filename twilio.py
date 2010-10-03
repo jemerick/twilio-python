@@ -80,6 +80,7 @@ class Account:
         self.id = id
         self.token = token
         self.api_version = api_version
+        self.response_format = '.json'
         self.opener = None
     
     def _build_get_uri(self, uri, params):
@@ -141,7 +142,7 @@ class Account:
         method: the HTTP method to use, defaults to POST
         vars: for POST, PUT, or GET, a dict of data to send
         
-        returns Twilio response in XML or raises an exception on error
+        returns Twilio response in JSON dictionary or raises an exception on error
         """
         if not path or len(path) < 1:
             raise ValueError('Invalid path parameter')
@@ -150,24 +151,23 @@ class Account:
                 'HTTP %s method not implemented' % method)
         
         if path[0] == '/':
-            uri = _TWILIO_API_URL + path
+            uri = _TWILIO_API_URL + path + self.response_format
         else:
-            uri = _TWILIO_API_URL + '/' + path
+            uri = _TWILIO_API_URL + '/' + path + self.response_format
         
         if APPENGINE:
             return self._appengine_fetch(uri, vars, method)
-        return self._urllib2_fetch(uri, vars, method)
+        response = self._urllib2_fetch(uri, vars, method)
+        return json.loads(response)
     
     def get_account(self):
         request_url = '/%s/Accounts/%s.json' % (self.api_version, self.id)
-        response = self.request(request_url, 'GET')
-        return json.loads(response)
+        return self.request(request_url, 'GET')
         
     def update_account(self, friendly_name):
         request_url = '/%s/Accounts/%s.json' % (self.api_version, self.id)
         parameters = {'FriendlyName': friendly_name}
-        response = self.request(request_url, 'POST', parameters)
-        return json.loads(response)
+        return self.request(request_url, 'POST', parameters)
         
     def available_local_phone_numbers(self, country='US', area_code=None, contains=None, in_region=None, in_postal_code=None, 
                                         near_lat_long=None, near_number=None, in_lata=None, in_rate_center=None, distance=None):
@@ -191,21 +191,18 @@ class Account:
             parameters['NearLatLong'] = near_lat_long
         if distance:
             parameters['NearLatLong'] = near_lat_long
-        response = self.request(request_url, 'GET', parameters)
-        return json.loads(response)
+        return self.request(request_url, 'GET', parameters)
         
     def available_toll_free_phone_numbers(self, country='US', contains=None):
         request_url = '/%s/Accounts/%s/AvailablePhoneNumbers/%s/TollFree.json' % (self.api_version, self.id, country)
         parameters = dict()
         if contains:
             parameters['Contains'] = contains
-        response = self.request(request_url, 'GET', parameters)
-        return json.loads(response)
+        return self.request(request_url, 'GET', parameters)
         
     def get_incoming_phone_number(self, incoming_phone_number_sid):
         request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
-        response = self.request(request_url, 'GET')
-        return json.loads(response)
+        return self.request(request_url, 'GET')
     
     def update_incoming_phone_number(self, incoming_phone_number_sid, friendly_name=None, api_version=None, voice_url=None, voice_method=None,
                                     voice_fallback_url=None, voice_fallback_method=None, status_callback=None, status_callback_method=None,
@@ -240,8 +237,7 @@ class Account:
         if voice_caller_id_lookup:
             parameters['VoiceCallerIdLookup'] = voice_caller_id_lookup
         
-        response = self.request(request_url, 'POST', parameters)
-        return json.loads(response)
+        return self.request(request_url, 'POST', parameters)
     
     def get_incoming_phone_numbers(self, phone_number=None, friendly_name=None):
         request_url = '/%s/Accounts/%s/IncomingPhoneNumbers.json' % (self.api_version, self.id)
@@ -253,8 +249,7 @@ class Account:
         if friendly_name:
             parameters['FriendlyName'] = friendly_name
         
-        response = self.request(request_url, 'GET', parameters)
-        return json.loads(response)
+        return self.request(request_url, 'GET', parameters)
     
     def request_incoming_phone_number(self, phone_number=None, area_code=None, friendly_name=None, api_version=None, voice_url=None, voice_method=None,
                                     voice_fallback_url=None, voice_fallback_method=None, status_callback=None, status_callback_method=None,
@@ -297,6 +292,8 @@ class Account:
             parameters['SmsFallbackMethod'] = sms_fallback_method
         if voice_caller_id_lookup:
             parameters['VoiceCallerIdLookup'] = voice_caller_id_lookup
+        
+        return self.request(request_url, 'POST', parameters)
         
 # TwiML Response Helpers
 # ===========================================================================
