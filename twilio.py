@@ -138,7 +138,7 @@ class Account:
         """sends a request and gets a response from the Twilio REST API
         
         path: the URL (relative to the endpoint URL, after the /v1
-        url: the HTTP method to use, defaults to POST
+        method: the HTTP method to use, defaults to POST
         vars: for POST or PUT, a dict of data to send
         
         returns Twilio response in XML or raises an exception on error
