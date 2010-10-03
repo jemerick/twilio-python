@@ -157,6 +157,17 @@ class Account:
         if APPENGINE:
             return self._appengine_fetch(uri, vars, method)
         return self._urllib2_fetch(uri, vars, method)
+    
+    def get_account(self):
+        request_url = '/%s/Accounts/%s.json' % (self.api_version, self.id)
+        response = self.request(request_url, 'GET')
+        return json.loads(response)
+        
+    def update_account(self, friendly_name):
+        request_url = '/%s/Accounts/%s.json' % (self.api_version, self.id)
+        parameters = {'FriendlyName': friendly_name}
+        response = self.request(request_url, 'POST', parameters)
+        return json.loads(response)
         
     def available_local_phone_numbers(self, country='US', area_code=None, contains=None, in_region=None, in_postal_code=None, 
                                         near_lat_long=None, near_number=None, in_lata=None, in_rate_center=None, distance=None):
@@ -252,6 +263,7 @@ class Account:
         
         if not phone_number and not area_code:
             raise TwilioException('PhoneNumber or AreaCode is required.')
+        
         # requried parameters
         if phone_number:
             parameters['PhoneNumber'] = phone_number
