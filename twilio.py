@@ -139,7 +139,7 @@ class Account:
         
         path: the URL (relative to the endpoint URL, after the /v1
         method: the HTTP method to use, defaults to POST
-        vars: for POST or PUT, a dict of data to send
+        vars: for POST, PUT, or GET, a dict of data to send
         
         returns Twilio response in XML or raises an exception on error
         """
