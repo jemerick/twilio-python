@@ -190,7 +190,12 @@ class Account:
             parameters['Contains'] = contains
         response = self.request(request_url, 'GET', parameters)
         return json.loads(response)
-
+        
+    def get_incoming_phone_number(self, incoming_phone_number_sid):
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
+        response = self.request(request_url, 'GET')
+        return json.loads(response)
+        
 # TwiML Response Helpers
 # ===========================================================================
 
