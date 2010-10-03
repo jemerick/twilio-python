@@ -195,6 +195,96 @@ class Account:
         request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
         response = self.request(request_url, 'GET')
         return json.loads(response)
+    
+    def update_incoming_phone_number(self, incoming_phone_number_sid, friendly_name=None, api_version=None, voice_url=None, voice_method=None,
+                                    voice_fallback_url=None, voice_fallback_method=None, status_callback=None, status_callback_method=None,
+                                    sms_url=None, sms_method=None, sms_fallback_url=None, sms_fallback_method=None, voice_caller_id_lookup=None):
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
+        parameters = dict()
+        
+        if friendly_name:
+            parameters['FriendlyName'] = friendly_name
+        if api_version:
+            parameters['ApiVersion'] = api_version
+        if voice_url:
+            parameters['VoiceUrl'] = voice_url
+        if voice_method:
+            parameters['VoiceMethod'] = voice_method
+        if voice_fallback_url:
+            parameters['VoiceFallbackUrl'] = voice_fallback_url
+        if voice_fallback_method:
+            parameters['VoiceFallbackMethod'] = voice_fallback_method
+        if status_callback:
+            parameters['StatusCallback'] = status_callback
+        if status_callback_method:
+            parameters['StatusCallbackMethod'] = status_callback_method
+        if sms_url:
+            parameters['SmsUrl'] = sms_url
+        if sms_method:
+            parameters['SmsMethod'] = sms_method
+        if sms_fallback_url:
+            parameters['SmsFallbackUrl'] = sms_fallback_url
+        if sms_fallback_method:
+            parameters['SmsFallbackMethod'] = sms_fallback_method
+        if voice_caller_id_lookup:
+            parameters['VoiceCallerIdLookup'] = voice_caller_id_lookup
+        
+        response = self.request(request_url, 'POST', parameters)
+        return json.loads(response)
+    
+    def get_incoming_phone_numbers(self, phone_number=None, friendly_name=None):
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers.json' % (self.api_version, self.id)
+        
+        parameters = dict()
+        
+        if phone_number:
+            parameters['PhoneNumber'] = phone_number
+        if friendly_name:
+            parameters['FriendlyName'] = friendly_name
+        
+        response = self.request(request_url, 'GET', parameters)
+        return json.loads(response)
+    
+    def request_incoming_phone_number(self, phone_number=None, area_code=None, friendly_name=None, api_version=None, voice_url=None, voice_method=None,
+                                    voice_fallback_url=None, voice_fallback_method=None, status_callback=None, status_callback_method=None,
+                                    sms_url=None, sms_method=None, sms_fallback_url=None, sms_fallback_method=None, voice_caller_id_lookup=None):
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers.json' % (self.api_version, self.id)
+        
+        if not phone_number and not area_code:
+            raise TwilioException('PhoneNumber or AreaCode is required.')
+        # requried parameters
+        if phone_number:
+            parameters['PhoneNumber'] = phone_number
+        elif area_code:
+            parameters['AreaCode'] = area_code
+        
+        # optional parameters
+        if friendly_name:
+            parameters['FriendlyName'] = friendly_name
+        if api_version:
+            parameters['ApiVersion'] = api_version
+        if voice_url:
+            parameters['VoiceUrl'] = voice_url
+        if voice_method:
+            parameters['VoiceMethod'] = voice_method
+        if voice_fallback_url:
+            parameters['VoiceFallbackUrl'] = voice_fallback_url
+        if voice_fallback_method:
+            parameters['VoiceFallbackMethod'] = voice_fallback_method
+        if status_callback:
+            parameters['StatusCallback'] = status_callback
+        if status_callback_method:
+            parameters['StatusCallbackMethod'] = status_callback_method
+        if sms_url:
+            parameters['SmsUrl'] = sms_url
+        if sms_method:
+            parameters['SmsMethod'] = sms_method
+        if sms_fallback_url:
+            parameters['SmsFallbackUrl'] = sms_fallback_url
+        if sms_fallback_method:
+            parameters['SmsFallbackMethod'] = sms_fallback_method
+        if voice_caller_id_lookup:
+            parameters['VoiceCallerIdLookup'] = voice_caller_id_lookup
         
 # TwiML Response Helpers
 # ===========================================================================
