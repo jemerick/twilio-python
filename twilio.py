@@ -259,7 +259,7 @@ class Account:
         if not phone_number and not area_code:
             raise TwilioException('PhoneNumber or AreaCode is required.')
         
-        # requried parameters
+        # required parameters
         if phone_number:
             parameters['PhoneNumber'] = phone_number
         elif area_code:
