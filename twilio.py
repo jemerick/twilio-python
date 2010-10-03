@@ -64,7 +64,7 @@ class Account:
     standalone python applications using the urllib/urlib2 libraries and
     inside Google App Engine applications using urlfetch.
     """
-    def __init__(self, id, token):
+    def __init__(self, id, token, api_version='2010-04-01'):
         """initialize a twilio account object
         
         id: Twilio account SID/ID
@@ -74,6 +74,7 @@ class Account:
         """
         self.id = id
         self.token = token
+        self.api_version = api_version
         self.opener = None
     
     def _build_get_uri(self, uri, params):
