@@ -34,6 +34,11 @@ try:
     APPENGINE = True
 except:
     APPENGINE = False
+    
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 _TWILIO_API_URL = 'https://api.twilio.com'
 
@@ -152,6 +157,39 @@ class Account:
         if APPENGINE:
             return self._appengine_fetch(uri, vars, method)
         return self._urllib2_fetch(uri, vars, method)
+        
+    def available_local_phone_numbers(self, country='US', area_code=None, contains=None, in_region=None, in_postal_code=None, 
+                                        near_lat_long=None, near_number=None, in_lata=None, in_rate_center=None, distance=None):
+        request_url = '/%s/Accounts/%s/AvailablePhoneNumbers/%s/Local.json' % (self.api_version, self.id, country)
+        parameters = dict()
+        if area_code:
+            parameters['AreaCode'] = area_code
+        if contains:
+            parameters['Contains'] = contains
+        if in_region:
+            parameters['InRegion'] = in_region
+        if in_postal_code:
+            parameters['InPostalCode'] = in_postal_code
+        if near_lat_long:
+            parameters['NearLatLong'] = near_lat_long
+        if near_number:
+            parameters['NearLatLong'] = near_lat_long
+        if in_lata:
+            parameters['InPostalCode'] = in_postal_code
+        if in_rate_center:
+            parameters['NearLatLong'] = near_lat_long
+        if distance:
+            parameters['NearLatLong'] = near_lat_long
+        response = self.request(request_url, 'GET', parameters)
+        return json.loads(response)
+        
+    def available_toll_free_phone_numbers(self, country='US', contains=None):
+        request_url = '/%s/Accounts/%s/AvailablePhoneNumbers/%s/TollFree.json' % (self.api_version, self.id, country)
+        parameters = dict()
+        if contains:
+            parameters['Contains'] = contains
+        response = self.request(request_url, 'GET', parameters)
+        return json.loads(response)
 
 # TwiML Response Helpers
 # ===========================================================================
