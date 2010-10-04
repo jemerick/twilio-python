@@ -156,8 +156,9 @@ class Account:
             uri = _TWILIO_API_URL + '/' + path + self.response_format
         
         if APPENGINE:
-            return self._appengine_fetch(uri, vars, method)
-        response = self._urllib2_fetch(uri, vars, method)
+            response = self._appengine_fetch(uri, vars, method)
+        else:
+            response = self._urllib2_fetch(uri, vars, method)
         return json.loads(response)
     
     def get_account(self):
