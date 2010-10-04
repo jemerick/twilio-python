@@ -490,7 +490,15 @@ class Account:
             parameters['DateCreated'] = date_created
         return self.request(request_url, 'GET', parameters)
         
+    def get_transcription(self, transcription_sid):
+        request_url = '/%s/Accounts/%s/Transcriptions/%s' % (self.api_version, self.id, transcription_sid)
+        return self.request(request_url, 'GET')
         
+    def get_transcriptions(self, recording_sid=None):
+        request_url = '/%s/Accounts/%s/Transcriptions' % (self.api_version, self.id)
+        if recording_sid:
+            request_url = '/%s/Accounts/%s/Recordings/%s/Transcriptions' % (self.api_version, self.id, recording_sid)
+        return self.request(request_url, 'GET')
     
 # TwiML Response Helpers
 # ===========================================================================
