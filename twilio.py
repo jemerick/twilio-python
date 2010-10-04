@@ -402,6 +402,45 @@ class Account:
         
         return self.request(request_url, 'POST', parameters)
         
+    def get_conference(self, conference_sid):
+        request_url = '/%s/Accounts/%s/Conferences/%s' % (self.api_version, self.id, conference_sid)
+        return self.request(request_url, 'GET')
+        
+    def get_conferences(self, status=None, friendly_name=None, date_created=None, date_updated=None):
+        request_url = '/%s/Accounts/%s/Conferences/%s' % (self.api_version, self.id, conference_sid)
+        parameters = dict()
+
+        if status:
+            parameters['Status'] = status
+        if friendly_name:
+            parameters['FriendlyName'] = friendly_name
+        if date_created:
+            parameters['DateCreated'] = date_created
+        if date_updated:
+            parameters['DateUpdated'] = date_updated
+            
+        return self.request(request_url, 'GET', parameters)
+        
+    def get_conference_participant(self, conference_sid, call_sid):
+        request_url = '/%s/Accounts/%s/Conferences/%s/Participants/%s' % (self.api_version, self.id, conference_sid, call_sid)
+        return self.request(request_url, 'GET')
+        
+    def update_conference_participant(self, conference_sid, call_sid, muted):
+        request_url = '/%s/Accounts/%s/Conferences/%s/Participants/%s' % (self.api_version, self.id, conference_sid, call_sid)
+        parameters = {'Muted': muted and 'true' or 'false',}
+        return self.request(request_url, 'POST', parameters)
+    
+    def remove_conference_participant(self, conference_sid, call_sid):
+        request_url = '/%s/Accounts/%s/Conferences/%s/Participants/%s' % (self.api_version, self.id, conference_sid, call_sid)
+        return self.request(request_url, 'DELETE')
+    
+    def get_conference_participants(self, conference_sid, muted=None):
+        request_url = '/%s/Accounts/%s/Conferences/%s/Participants' % (self.api_version, self.id, conference_sid, call_sid)
+        parameters = dict()
+        if muted is not None:
+            parameters['Muted'] = muted and 'true' or 'false'
+        return self.request(request_url, 'GET', parameters)
+        
 # TwiML Response Helpers
 # ===========================================================================
 
