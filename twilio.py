@@ -499,7 +499,27 @@ class Account:
         if recording_sid:
             request_url = '/%s/Accounts/%s/Recordings/%s/Transcriptions' % (self.api_version, self.id, recording_sid)
         return self.request(request_url, 'GET')
+        
+    def get_notification(self, notification_sid):
+        request_url = '/%s/Accounts/%s/Notifications/%s' % (self.api_version, self.id, notification_sid)
+        return self.request(request_url, 'GET')
     
+    def delete_notification(self, notification_sid):
+        request_url = '/%s/Accounts/%s/Notifications/%s' % (self.api_version, self.id, notification_sid)
+        return self.request(request_url, 'DELETE')
+        
+    def get_notifications(self, call_sid=None, log=None, message_date=None):
+        request_url = '/%s/Accounts/%s/Notifications' % (self.api_version, self.id)
+        if call_sid:
+            request_url = '/%s/Accounts/%s/Calls/%s/Notifications' % (self.api_version, self.id, call_sid)
+        
+        parameters = dict()
+        if log:
+            parameters['Log'] = log
+        if message_date:
+            parameters['MessageDate'] = message_date
+        return self.request(request_url, 'GET', parameters)
+        
 # TwiML Response Helpers
 # ===========================================================================
 
