@@ -159,8 +159,10 @@ class Account:
             response = self._appengine_fetch(uri, vars, method)
         else:
             response = self._urllib2_fetch(uri, vars, method)
-
-        return json.loads(response)
+        
+        if response:
+            return json.loads(response)
+        return None
     
     def get_account(self):
         request_url = '/%s/Accounts/%s' % (self.api_version, self.id)
