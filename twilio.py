@@ -520,6 +520,24 @@ class Account:
             parameters['MessageDate'] = message_date
         return self.request(request_url, 'GET', parameters)
         
+    def get_sandbox(self):
+        request_url = '/%s/Accounts/%s/Sandbox' % (self.api_version, self.id)
+        return self.request(request_url, 'GET')
+    
+    def update_sandbox(self, voice_url=None, voice_method=None, sms_url=None, sms_method=None):
+        request_url = '/%s/Accounts/%s/Sandbox' % (self.api_version, self.id)
+        parameters = dict()
+        if voice_url:
+            parameters['VoiceUrl'] = voice_url
+        if voice_method:
+            parameters['VoiceMethod'] = voice_method
+        if sms_url:
+            parameters['SmsUrl'] = sms_url
+        if sms_method:
+            parameters['SmsMethod'] = sms_method
+            
+        return self.request(request_url, 'POST', parameters)
+        
 # TwiML Response Helpers
 # ===========================================================================
 
