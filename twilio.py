@@ -441,6 +441,57 @@ class Account:
             parameters['Muted'] = muted and 'true' or 'false'
         return self.request(request_url, 'GET', parameters)
         
+    def get_sms_message(self, sms_message_sid):
+        request_url = '/%s/Accounts/%s/SMS/Messages/%s' % (self.api_version, self.id, sms_message_sid)
+        return self.request(request_url, 'GET')
+    
+    def get_sms_messages(self, to_number=None, from_number=None, date_sent=None):
+        request_url = '/%s/Accounts/%s/SMS/Messages' % (self.api_version, self.id)
+        parameters = dict()
+
+        if to_number:
+            parameters['To'] = to_number
+        if from_number:
+            parameters['From'] = from_number
+        if date_sent:
+            parameters['DateSent'] = date_sent
+            
+        return self.request(request_url, 'GET', parameters)
+        
+    def send_sms_message(self, to_number, from_number, body, status_callback=None):
+        request_url = '/%s/Accounts/%s/SMS/Messages' % (self.api_version, self.id)
+        parameters = {'From': from_number, 'To': to_number, 'Body': body}
+
+        if status_callback:
+            parameters['StatusCallback'] = status_callback
+            
+        return self.request(request_url, 'POST', parameters)
+        
+    def get_recording(self, recording_sid):
+        request_url = '/%s/Accounts/%s/Recordings/%s' % (self.api_version, self.id, recording_sid)
+        return self.request(request_url, 'GET')
+        
+    def get_recording_url(self, recording_sid, mp3=False):
+        request_url = '/%s/Accounts/%s/Recordings/%s' % (self.api_version, self.id, recording_sid)
+        if mp3:
+            request_url += '.mp3'    
+        return _TWILIO_API_URL + request_url
+    
+    def delete_recording(self, recording_sid):
+        request_url = '/%s/Accounts/%s/Recordings/%s' % (self.api_version, self.id, recording_sid)
+        return self.request(request_url, 'DELETE')
+
+    def get_recordings(self, call_sid=None, date_created=None):
+        request_url = '/%s/Accounts/%s/Recordings' % (self.api_version, self.id)
+        parameters = dict()
+        if call_sid:
+            parameters['CallSid'] = call_sid
+        if date_created:
+            parameters['DateCreated'] = date_created
+        return self.request(request_url, 'GET', parameters)
+        
+        
+    
 # TwiML Response Helpers
 # ===========================================================================
 
