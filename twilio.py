@@ -154,25 +154,26 @@ class Account:
             uri = _TWILIO_API_URL + path + self.response_format
         else:
             uri = _TWILIO_API_URL + '/' + path + self.response_format
-        
+
         if APPENGINE:
             response = self._appengine_fetch(uri, vars, method)
         else:
             response = self._urllib2_fetch(uri, vars, method)
+
         return json.loads(response)
     
     def get_account(self):
-        request_url = '/%s/Accounts/%s.json' % (self.api_version, self.id)
+        request_url = '/%s/Accounts/%s' % (self.api_version, self.id)
         return self.request(request_url, 'GET')
         
     def update_account(self, friendly_name):
-        request_url = '/%s/Accounts/%s.json' % (self.api_version, self.id)
+        request_url = '/%s/Accounts/%s' % (self.api_version, self.id)
         parameters = {'FriendlyName': friendly_name}
         return self.request(request_url, 'POST', parameters)
         
     def available_local_phone_numbers(self, country='US', area_code=None, contains=None, in_region=None, in_postal_code=None, 
                                         near_lat_long=None, near_number=None, in_lata=None, in_rate_center=None, distance=None):
-        request_url = '/%s/Accounts/%s/AvailablePhoneNumbers/%s/Local.json' % (self.api_version, self.id, country)
+        request_url = '/%s/Accounts/%s/AvailablePhoneNumbers/%s/Local' % (self.api_version, self.id, country)
         parameters = dict()
         if area_code:
             parameters['AreaCode'] = area_code
@@ -195,24 +196,24 @@ class Account:
         return self.request(request_url, 'GET', parameters)
         
     def available_toll_free_phone_numbers(self, country='US', contains=None):
-        request_url = '/%s/Accounts/%s/AvailablePhoneNumbers/%s/TollFree.json' % (self.api_version, self.id, country)
+        request_url = '/%s/Accounts/%s/AvailablePhoneNumbers/%s/TollFree' % (self.api_version, self.id, country)
         parameters = dict()
         if contains:
             parameters['Contains'] = contains
         return self.request(request_url, 'GET', parameters)
         
     def get_incoming_phone_number(self, incoming_phone_number_sid):
-        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s' % (self.api_version, self.id, incoming_phone_number_sid)
         return self.request(request_url, 'GET')
         
     def release_incoming_phone_number(self, incoming_phone_number_sid):
-        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s' % (self.api_version, self.id, incoming_phone_number_sid)
         return self.request(request_url, 'DELETE')
     
     def update_incoming_phone_number(self, incoming_phone_number_sid, friendly_name=None, api_version=None, voice_url=None, voice_method=None,
                                     voice_fallback_url=None, voice_fallback_method=None, status_callback=None, status_callback_method=None,
                                     sms_url=None, sms_method=None, sms_fallback_url=None, sms_fallback_method=None, voice_caller_id_lookup=None):
-        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s' % (self.api_version, self.id, incoming_phone_number_sid)
         parameters = dict()
         
         if friendly_name:
@@ -245,7 +246,7 @@ class Account:
         return self.request(request_url, 'POST', parameters)
     
     def get_incoming_phone_numbers(self, phone_number=None, friendly_name=None):
-        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers.json' % (self.api_version, self.id)
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers' % (self.api_version, self.id)
         
         parameters = dict()
         
@@ -259,7 +260,7 @@ class Account:
     def request_incoming_phone_number(self, phone_number=None, area_code=None, friendly_name=None, api_version=None, voice_url=None, voice_method=None,
                                     voice_fallback_url=None, voice_fallback_method=None, status_callback=None, status_callback_method=None,
                                     sms_url=None, sms_method=None, sms_fallback_url=None, sms_fallback_method=None, voice_caller_id_lookup=None):
-        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers.json' % (self.api_version, self.id)
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers' % (self.api_version, self.id)
         
         if not phone_number and not area_code:
             raise TwilioException('PhoneNumber or AreaCode is required.')
@@ -301,20 +302,20 @@ class Account:
         return self.request(request_url, 'POST', parameters)
         
     def get_outgoing_caller_id(self, outgoing_caller_id_sid):
-        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s.json' % (self.api_version, self.id, outgoing_caller_id_sid)
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s' % (self.api_version, self.id, outgoing_caller_id_sid)
         return self.request(request_url, 'GET')
         
     def update_outgoing_caller_id(self, outgoing_caller_id_sid, friendly_name):
-        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s.json' % (self.api_version, self.id, outgoing_caller_id_sid)
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s' % (self.api_version, self.id, outgoing_caller_id_sid)
         parameters = {'FriendlyName': friendly_name}
         return self.request(request_url, 'POST', parameters)
     
     def delete_outgoing_caller_id(self, outgoing_caller_id_sid):
-        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s.json' % (self.api_version, self.id, outgoing_caller_id_sid)
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s' % (self.api_version, self.id, outgoing_caller_id_sid)
         return self.request(request_url, 'DELETE')
     
     def get_outgoing_caller_ids(self, phone_number=None, friendly_name=None):
-        request_url = '/%s/Accounts/%s/OutgoingCallerIds.json' % (self.api_version, self.id)
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds' % (self.api_version, self.id)
         parameters = dict()
         
         if phone_number:
@@ -325,7 +326,7 @@ class Account:
         return self.request(request_url, 'GET', parameters)
         
     def request_outgoing_caller_id(self, phone_number, friendly_name=None, call_delay=None):
-        request_url = '/%s/Accounts/%s/OutgoingCallerIds.json' % (self.api_version, self.id)
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds' % (self.api_version, self.id)
         parameters = {'PhoneNumber': phone_number}
         
         if friendly_name:
