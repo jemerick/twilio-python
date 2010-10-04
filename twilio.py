@@ -299,6 +299,41 @@ class Account:
         
         return self.request(request_url, 'POST', parameters)
         
+    def get_outgoing_caller_id(self, outgoing_caller_id_sid):
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s.json' % (self.api_version, self.id, outgoing_caller_id_sid)
+        return self.request(request_url, 'GET')
+        
+    def update_outgoing_caller_id(self, outgoing_caller_id_sid, friendly_name):
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s.json' % (self.api_version, self.id, outgoing_caller_id_sid)
+        parameters = {'FriendlyName': friendly_name}
+        return self.request(request_url, 'POST', parameters)
+    
+    def delete_outgoing_caller_id(self, outgoing_caller_id_sid):
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds/%s.json' % (self.api_version, self.id, outgoing_caller_id_sid)
+        return self.request(request_url, 'DELETE')
+    
+    def get_outgoing_caller_ids(self, phone_number=None, friendly_name=None):
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds.json' % (self.api_version, self.id)
+        parameters = dict()
+        
+        if phone_number:
+            parameters['PhoneNumber'] = phone_number
+        if friendly_name:
+            parameters['FriendlyName'] = friendly_name
+            
+        return self.request(request_url, 'GET', parameters)
+        
+    def request_outgoing_caller_id(self, phone_number, friendly_name=None, call_delay=None):
+        request_url = '/%s/Accounts/%s/OutgoingCallerIds.json' % (self.api_version, self.id)
+        parameters = {'PhoneNumber': phone_number}
+        
+        if friendly_name:
+            parameters['FriendlyName'] = friendly_name
+        if call_delay:
+            parameters['CallDelay'] = call_delay
+            
+        return self.request(request_url, 'POST', parameters)
+        
 # TwiML Response Helpers
 # ===========================================================================
 
