@@ -203,6 +203,10 @@ class Account:
     def get_incoming_phone_number(self, incoming_phone_number_sid):
         request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
         return self.request(request_url, 'GET')
+        
+    def release_incoming_phone_number(self, incoming_phone_number_sid):
+        request_url = '/%s/Accounts/%s/IncomingPhoneNumbers/%s.json' % (self.api_version, self.id, incoming_phone_number_sid)
+        return self.request(request_url, 'DELETE')
     
     def update_incoming_phone_number(self, incoming_phone_number_sid, friendly_name=None, api_version=None, voice_url=None, voice_method=None,
                                     voice_fallback_url=None, voice_fallback_method=None, status_callback=None, status_callback_method=None,
