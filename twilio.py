@@ -337,6 +337,70 @@ class Account:
             parameters['CallDelay'] = call_delay
             
         return self.request(request_url, 'POST', parameters)
+    
+    def get_call(self, call_sid):
+        request_url = '/%s/Accounts/%s/Calls/%s' % (self.api_version, self.id, call_sid)
+        return self.request(request_url, 'GET')
+    
+    def modify_call(self, call_sid, url=None, method=None, status=None):
+        request_url = '/%s/Accounts/%s/Calls/%s' % (self.api_version, self.id, call_sid)
+        parameters = dict()
+        if url:
+            parameters['Url'] = url
+        if method:
+            parameters['Method'] = method
+        if status:
+            parameters['Status'] = status
+            
+        return self.request(request_url, 'POST', parameters)
+    
+    def get_calls(self, to_number=None, from_number=None, status=None, start_time=None, end_time=None):
+        request_url = '/%s/Accounts/%s/Calls' % (self.api_version, self.id)
+        parameters = dict()
+
+        if to_number:
+            parameters['To'] = to_number
+        if from_number:
+            parameters['From'] = from_number
+        if status:
+            parameters['Status'] = status
+        if start_time:
+            parameters['StartTime'] = start_time
+        if end_time:
+            parameters['EndTime'] = end_time
+            
+        return self.request(request_url, 'GET', parameters)
+    
+    def make_call(self, to_number, from_number, url, method=None, fallback_url=None, fallback_method=None, status_callback=None,
+                    status_callback_method=None, send_digits=None, if_machine=None, timeout=None):
+                    
+        request_url = '/%s/Accounts/%s/Calls' % (self.api_version, self.id)
+        parameters = dict()
+
+        if to_number:
+            parameters['To'] = to_number
+        if from_number:
+            parameters['From'] = from_number
+        if url:
+            parameters['Url'] = url
+        if method:
+            parameters['Method'] = method
+        if fallback_url:
+            parameters['FallbackUrl'] = fallback_url
+        if fallback_method:
+            parameters['FallbackMethod'] = fallback_method
+        if status_callback:
+            parameters['StatusCallback'] = status_callback
+        if status_callback_method:
+            parameters['StatusCallbackMethod'] = status_callback_method
+        if send_digits:
+            parameters['SendDigits'] = send_digits
+        if if_machine:
+            parameters['IfMachine'] = if_machine
+        if timeout:
+            parameters['Timeout'] = timeout       
+        
+        return self.request(request_url, 'POST', parameters)
         
 # TwiML Response Helpers
 # ===========================================================================
